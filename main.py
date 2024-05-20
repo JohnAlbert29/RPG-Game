@@ -1,50 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-
-class Character:
-    def __init__(self, char_class: str = "", char_weapon: str = "", char_ability: list = None):
-        self.char_class = char_class
-        self.char_weapon = char_weapon
-        self.char_ability = char_ability if char_ability is not None else []
-
-    def set_class(self, x: int) -> str:
-        classes = {
-            1: "Wizard",
-            2: "Knight",
-            3: "Archer",
-            4: "Assassin"
-        }
-        self.char_class = classes.get(x, None)
-        if not self.char_class:
-            return "Invalid Input"
-        return self.char_class
-
-    def set_weapon(self, y: int) -> str:
-        weapons = {
-            1: "Wizard Staff",
-            2: "Sword",
-            3: "Bow & Arrow",
-            4: "Katar"
-        }
-        self.char_weapon = weapons.get(y, None)
-        if not self.char_weapon:
-            return "Invalid Input"
-        return self.char_weapon
-
-    def set_ability(self, x: int, z: int) -> str:
-        abilities = {
-            1: ["Energy Ball", "Dragons Breath", "Crowns of Flame", "Hail Storm"],
-            2: ["Fire Slash", "Power Slash", "Gigantic Storm", "Chaotic Disaster"],
-            3: ["Take Aim", "Quick Shot", "Blazing Arrow", "Frost Arrow"],
-            4: ["Cloaking", "Enchant Poison", "Sonic Acceleration", "Meteor Assault"]
-        }
-        ability_list = abilities.get(x, None)
-        if not ability_list:
-            return "Invalid Class Input"
-        try:
-            return ability_list[z]
-        except IndexError:
-            return "Invalid Ability Input"
+from character import Character
+from data import CLASSES, WEAPONS, ABILITIES
 
 def submit_class(event):
     class_choice = class_combobox.current() + 1
@@ -80,13 +37,7 @@ def submit_ability():
             display_selections()
 
 def update_abilities(class_choice):
-    abilities_dict = {
-        1: ["Energy Ball", "Dragons Breath", "Crowns of Flame", "Hail Storm"],
-        2: ["Fire Slash", "Power Slash", "Gigantic Storm", "Chaotic Disaster"],
-        3: ["Take Aim", "Quick Shot", "Blazing Arrow", "Frost Arrow"],
-        4: ["Cloaking", "Enchant Poison", "Sonic Acceleration", "Meteor Assault"]
-    }
-    ability_combobox.config(values=abilities_dict.get(class_choice, []))
+    ability_combobox.config(values=ABILITIES.get(class_choice, []))
     ability_combobox.current(0)
     ability_combobox.config(state=tk.NORMAL)
 
@@ -113,12 +64,12 @@ root.title("Character Creation")
 root.geometry("400x500")
 
 tk.Label(root, text="Select Class:", font=("Helvetica", 12)).pack(pady=10)
-class_combobox = ttk.Combobox(root, values=["Wizard", "Knight", "Archer", "Assassin"], font=("Helvetica", 12), state="readonly")
+class_combobox = ttk.Combobox(root, values=list(CLASSES.values()), font=("Helvetica", 12), state="readonly")
 class_combobox.pack(pady=10)
 class_combobox.bind("<<ComboboxSelected>>", submit_class)
 
 tk.Label(root, text="Select Weapon:", font=("Helvetica", 12)).pack(pady=10)
-weapon_combobox = ttk.Combobox(root, values=["Wizard Staff", "Sword", "Bow & Arrow", "Katar"], font=("Helvetica", 12), state="readonly")
+weapon_combobox = ttk.Combobox(root, values=list(WEAPONS.values()), font=("Helvetica", 12), state="readonly")
 weapon_combobox.pack(pady=10)
 weapon_combobox.bind("<<ComboboxSelected>>", submit_weapon)
 
